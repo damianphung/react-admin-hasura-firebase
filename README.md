@@ -1,20 +1,21 @@
-# React Admin Low Code
+# React Admin Hasura Firebase
 
-[![CircleCI](https://circleci.com/gh/dvasdekis/react-admin-low-code.svg?style=svg)](https://circleci.com/gh/dvasdekis/react-admin-low-code)
+[![CircleCI](https://circleci.com/gh/dvasdekis/react-admin-hasura-firebase.svg?style=svg)](https://circleci.com/gh/dvasdekis/react-admin-hasura-firebase)
 
-This is an example [react-admin](https://marmelab.com/react-admin/) application (configuration based CRUD admin UI builder) demonstrating how to use the [ra-data-hasura-graphql](https://github.com/Steams/ra-data-hasura-graphql) data provider with a [Hasura](https://hasura.io/) (automatic GraphQL API backend on top of PostgreSQL). By combining these two technologies, you can build an entire back office admin suite in a matter of hours. 
+This is an example [react-admin](https://marmelab.com/react-admin/) (configuration based CRUD admin UI builder) starter pack that combines the [Hasura](https://hasura.io/) (automatic GraphQL API backend on top of PostgreSQL) data provider with a [Firebase](https://firebase.google.com/docs/auth) authentication provider. 
+
+By combining these three technologies, you can build secure, database-driven web app interfaces with all business logic written entirely in SQL.
+
 
 ## Available Scripts
 
-In the project directory, you can run:
-
-### Full stack: `docker-compose up --quiet-pull --force-recreate --build`
+In the project directory, you can run: `docker-compose up --quiet-pull --renew-anon-volumes --build`
 
 It will take more time to run the first time, as Docker installs node_modules in a temporary container.
 
 The containers that get started are:
+ - Webserver (ra-webserver) - Creates the npm-built webserver on port 8080
  - Hasura (graphql-engine) - Creates a Hasura instance on port 8081
- - Webserver (ra-webserver) - Creates the yarn-started webserver on an Apline Linux instance
  - Postgres (postgres) - Database instance
  - Flyway (flyway) - Migrates (runs starting SQL) the Postgres container to the state described in your SQL files in `./migrations/sql`
  - graphql-migrations - Migrates (sets initial config) the Hasura container to the state described in your metadata.json file in `./migrations/hasura`
@@ -22,8 +23,8 @@ The containers that get started are:
 
 Ideally there'd be a container that runs frontend tests for the ra-webserver instance. But I am a backend guy and I don't know how they work.
 
-I quite like this one-liner for killing and recreating everything:
-`docker-compose down;docker volume rm $(docker volume ls -q); docker system prune --volumes -f;docker-compose up -d --build --force-recreate`
+
+=======
 
 ### Webserver only:
 
