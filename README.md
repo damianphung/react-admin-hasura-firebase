@@ -1,8 +1,11 @@
-# React Admin Low Code
+# React Admin Hasura Firebase
 
-[![CircleCI](https://circleci.com/gh/dvasdekis/react-admin-low-code.svg?style=svg)](https://circleci.com/gh/dvasdekis/react-admin-low-code)
+[![CircleCI](https://circleci.com/gh/dvasdekis/react-admin-hasura-firebase.svg?style=svg)](https://circleci.com/gh/dvasdekis/react-admin-hasura-firebase)
 
-This is an example [react-admin](https://marmelab.com/react-admin/) application (configuration based CRUD admin UI builder) demonstrating how to use the [ra-data-hasura-graphql](https://github.com/Steams/ra-data-hasura-graphql) data provider with a [Hasura](https://hasura.io/) (automatic GraphQL API backend on top of PostgreSQL). By combining these two technologies, you can build an entire back office admin suite in a matter of hours. 
+This is an example [react-admin](https://marmelab.com/react-admin/) (configuration based CRUD admin UI builder) starter pack that combines the [Hasura](https://hasura.io/) (automatic GraphQL API backend on top of PostgreSQL) data provider with a [Firebase](https://firebase.google.com/docs/auth) authentication provider. 
+
+By combining these three technologies, you can build secure, database-driven web app interfaces with all business logic written entirely in SQL.
+
 
 ## Available Scripts
 
