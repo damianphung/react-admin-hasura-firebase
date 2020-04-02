@@ -6,7 +6,7 @@ This is an example [react-admin](https://marmelab.com/react-admin/) (configurati
 
 ![High-Level Architecure Diagram](https://raw.githubusercontent.com/dvasdekis/react-admin-hasura-firebase/master/public/architecture.png)
 
-This approach lets us serve GraphQL queries from our Postgres database, with a frontend built dynamically from inspection of the Postgres schema. Additionally, user creation and queries to the database are secured by Firebase Authentication.
+This approach lets us serve GraphQL queries from our Postgres database, with a **frontend built dynamically from inspection of the Postgres schema.** Additionally, user creation and queries to the database are secured by Firebase Authentication.
 
 *By combining these three technologies, you can build secure, database-driven web app interfaces with all business logic written entirely in SQL.*
 
