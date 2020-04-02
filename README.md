@@ -54,9 +54,9 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 Having a managed PostgreSQL instance means that Firebase can create users in the instance via a function when a user goes through your create user process, and also that people can access your instance without you leaving your computer on :)
 
 You will need to:
-0. Get this repo hosted somewhere (I use Netlify)
-1. Set up a Google Cloud Billing Account (required for Firebase to access GCP)
-2. Replace the addresses to the Postgres server with your GCP details in the Hasura Docker config
-3. Create a Google Cloud SQL Server (I use `gcloud sql instances create "db_instance" --database-version=POSTGRES_11 --zone="project_zone" --tier=db-g1-small --storage-type=SSD`)
-4. Create a Hasura server on Google Cloud based on the container (I use `gcloud compute instances create-with-container "hasura_instance" --container-image="hasura/graphql-engine:v1.1.0" --machine-type=e2-micro --container-env-file="./hasura.env" --container-env HASURA_GRAPHQL_ADMIN_SECRET="hasura_admin_secret",HASURA_GRAPHQL_ACCESS_KEY="hasura_admin_secret",HASURA_GRAPHQL_DATABASE_URL="postgres://hasurauser:$hasura_db_pw@{sql_ip}:5432/postgres" --zone="project_zone" --container-restart-policy=always --tags="http-server" --address="hasura_fixed_ext_ip"`).
-5. Uncomment lines 28 to 42 in `firebase/functions/index.js`
+1. Get this repo hosted somewhere (I use Netlify)
+2. Set up a Google Cloud Billing Account (required for Firebase to access GCP)
+3. Replace the addresses to the Postgres server with your GCP details in the Hasura Docker config
+4. Create a Google Cloud SQL Server (I use `gcloud sql instances create "db_instance" --database-version=POSTGRES_11 --zone="project_zone" --tier=db-g1-small --storage-type=SSD`)
+5. Create a Hasura server on Google Cloud based on the container (I use `gcloud compute instances create-with-container "hasura_instance" --container-image="hasura/graphql-engine:v1.1.0" --machine-type=e2-micro --container-env-file="./hasura.env" --container-env HASURA_GRAPHQL_ADMIN_SECRET="hasura_admin_secret",HASURA_GRAPHQL_ACCESS_KEY="hasura_admin_secret",HASURA_GRAPHQL_DATABASE_URL="postgres://hasurauser:$hasura_db_pw@{sql_ip}:5432/postgres" --zone="project_zone" --container-restart-policy=always --tags="http-server" --address="hasura_fixed_ext_ip"`).
+6. Uncomment lines 28 to 42 in `firebase/functions/index.js`
