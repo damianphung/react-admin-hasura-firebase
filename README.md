@@ -10,19 +10,20 @@ This approach lets us serve GraphQL queries from our Postgres database, with a *
 
 *By combining these three technologies, you can build secure, database-driven web app interfaces with all business logic written entirely in SQL.*
 
-
-## Deploying the stack
+### Understanding the permissions model
 
 This repo is bundled with a Firebase project that has a couple of users defined. They are:
 * test@example.com (password: bigpassword, Firebase ID: mlYsXk9rlHc37tYJXBCFMnzHEGF3)
 * test2@example.com (password: bigpassword, Firebase ID: xVSkxIkpMFPReOrooBSuU3K6W4G2)
 
-Logging in with these users, you can see that they view rows in Postgres based on the value of their firebase UserID.
+Logging into the frontend with these users, you can see that they can only view rows in Postgres based on the value of their firebase UserID.
 
 You will need your own Firebase account if you wish to create users for your own project. 
 1. Create a free Firebase project. Copy the firebase config lines from Project Settings, General, Firebase SDK snippet.
 2. Replace the API config at the top of `src/App.JS` with the values from the step above.
 3. Create users, and replace their usernames and Firebase IDs in `migrations/sql/V1__todo_app.up.sql` with your own values.
+
+## Deploying the stack
 
 ### Deploying Locally (for development)
 
