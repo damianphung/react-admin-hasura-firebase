@@ -21,7 +21,7 @@ const firebaseOptions = {
   // Enable logging of react-admin-firebase
   logging: true,
   // Authentication persistence, defaults to 'session', options are 'session' | 'local' | 'none'
-  persistence: "local"
+  persistence: "session"
 };
 
 // This defines the AuthProvider first
