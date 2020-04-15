@@ -29,6 +29,7 @@ You will need your own Firebase account if you wish to create users for your own
 
 In the project directory, you can run: 
 ##### `docker-compose up --no-recreate --build`
+If you want to rebuild the stack from scratch, run `docker container prune -f && docker volume prune -f && docker-compose pull && docker-compose up --build --no-recreate --remove-orphans`
 
 It will take more time to run the first time, as Docker installs node_modules in a temporary container. You will have a webserver on http://localhost:8080 and a Hasura server on http://localhost:8081
 
