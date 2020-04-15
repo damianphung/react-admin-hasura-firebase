@@ -27,21 +27,21 @@ exports.processSignUp = functions.auth.user().onCreate(user => {
     }
   };
 
-  // Below is only needed if you wish to have Firebase sync its users to a Google Cloud DB
-  // // Write the new user to the database
-  // const text = 'INSERT INTO public.users(id, email) VALUES($1, $2)';
-  // const values = [user.uid, user.email];
-  // (async () => {
-  //   const client = await pool.connect();
-  //   try {
-  //     const res = await client.query(text, values);
-  //     console.log(res.rows[0])
-  //   } finally {
-  //     // Make sure to release the client before any error handling,
-  //     // just in case the error handling itself throws an error.
-  //     client.release()
-  //   }
-  // })().catch(err => console.log(err.stack));
+// Below is only needed if you wish to have Firebase sync its users to a Google Cloud DB
+// We can write any parameter listed here: https://firebase.google.com/docs/reference/admin/node/admin.auth.UserRecord.html
+// const text = 'INSERT INTO public.users(id, email) VALUES($1, $2)';
+// const values = [user.uid, user.email];
+// (async () => {
+//   const client = await pool.connect();
+//   try {
+//     const res = await client.query(text, values);
+//     console.log(res.rows[0])
+//   } finally {
+//     // Make sure to release the client before any error handling,
+//     // just in case the error handling itself throws an error.
+//     client.release()
+//   }
+// })().catch(err => console.log(err.stack));
 
   return admin
     .auth()
