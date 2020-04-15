@@ -5,7 +5,9 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 // const { Pool } = require('pg');
 admin.initializeApp(functions.config().firebase);
-//
+
+// Below extracts environment variables from Firebase, and uses them to define the connection to Postgres
+// Uncomment the below if you wish to write your users to a Postgres DB
 // const pool = new Pool({
 //   user: functions.config().database.user,
 //   host: functions.config().database.ip,
