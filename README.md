@@ -28,7 +28,7 @@ You will need your own Firebase account if you wish to create users for your own
 ### Deploying Locally (for development)
 
 In the project directory, you can run: 
-##### `docker-compose up --quiet-pull --renew-anon-volumes --build`
+##### `docker-compose up --no-recreate --build`
 
 It will take more time to run the first time, as Docker installs node_modules in a temporary container. You will have a webserver on http://localhost:8080 and a Hasura server on http://localhost:8081
 
