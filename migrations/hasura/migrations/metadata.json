@@ -6,6 +6,29 @@
         "schema": "public",
         "name": "todos"
       },
+      "insert_permissions": [
+        {
+          "role": "user",
+          "permission": {
+            "check": {
+              "_or": [
+                {
+                  "user_id": {
+                    "_eq": "X-Hasura-User-Id"
+                  }
+                },
+                {
+                  "is_public": {
+                    "_eq": true
+                  }
+                }
+              ]
+            },
+            "columns": [],
+            "backend_only": false
+          }
+        }
+      ],
       "select_permissions": [
         {
           "role": "user",
