@@ -43,7 +43,9 @@
             "columns": [
               "is_completed",
               "is_public",
-              "title"
+              "title",
+              "created_at",
+              "user_id"
             ],
             "filter": {
               "user_id": {
