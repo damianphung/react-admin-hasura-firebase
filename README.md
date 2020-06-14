@@ -26,7 +26,7 @@ This repo is bundled with a Firebase project that has a couple of users defined.
 * test@example.com (password: bigpassword, Firebase ID: mlYsXk9rlHc37tYJXBCFMnzHEGF3)
 * test2@example.com (password: bigpassword, Firebase ID: xVSkxIkpMFPReOrooBSuU3K6W4G2)
 
-Logging into the frontend with these users, you can see that they can only view rows in Postgres based on the value of their firebase UserID.
+Logging into the frontend with these users, you can see that they can view rows across Todos / Users in Postgres based on the value of their firebase UserID. The are also able to Insert / Update todos based on the value of thier firebase UserID. Currently when a user performs an action they don't have permissions for, their session will be invalidated and they will be logged out. 
 
 You will need your own Firebase account if you wish to create users for your own project. 
 1. Create a free Firebase project. Copy the firebase config lines from Project Settings, General, Firebase SDK snippet.
