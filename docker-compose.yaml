@@ -69,6 +69,3 @@ services:
       dockerfile: Dockerfile
     restart: on-failure
 
-
-
-
