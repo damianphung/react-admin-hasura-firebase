@@ -39,7 +39,7 @@ You will need your own Firebase account if you wish to create users for your own
 
 In the project directory, you can run: 
 ##### `docker-compose up --no-recreate --build`
-If you want to rebuild the stack from scratch (or if Flyway is giving you `Migration checksum mismatch`), run `docker container prune -f && docker volume prune -f && docker-compose pull && docker-compose up --build --no-recreate --remove-orphans`
+If you want to rebuild the stack from scratch (or if Flyway is giving you `Migration checksum mismatch`), run `docker container prune -f && docker volume prune -f && docker-compose pull && docker-compose up --build --renew-anon-volumes --remove-orphans`
 
 It will take more time to run the first time, as Docker installs node_modules in a temporary container. You will have a webserver on http://localhost:8080 and a Hasura server on http://localhost:8081
 
@@ -50,6 +50,7 @@ The containers that get started are:
  - Flyway (flyway) - Migrates (runs starting SQL) the Postgres container to the state described in your SQL files in `./migrations/sql`
  - graphql-migrations - Migrates (sets initial config) the Hasura container to the state described in your metadata.json file in `./migrations/hasura`
  - PGTap - Tests the database instance against PGTap SQL as written in `./tests/sql`
+ - Selenium (selenium-tests) - Tests the project end to end with tests written in [Selenium Python](https://selenium-python.readthedocs.io/getting-started.html)
 
 Ideally there'd be a container that runs frontend tests for the ra-webserver instance. Pull requests welcome.
 

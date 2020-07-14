@@ -13,3 +13,4 @@ jobs:
       # Run our migrations for Hasura here so that it blocks whatever we use to API test eventually
       - run: docker-compose up --quiet-pull --exit-code-from graphql-migrations --build graphql-migrations
       # Our API test runner can go here eventually:
+      - run: docker-compose up --quiet-pull --exit-code-from selenium-tests --build selenium-tests
