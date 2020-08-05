@@ -63,9 +63,9 @@ services:
     ports:
       - 8080:80
     restart: on-failure
-  selenium-tests:
-    build:
-      context: tests/selenium_chrome
-      dockerfile: Dockerfile
-    restart: on-failure
+  # selenium-tests:
+  #   build:
+  #     context: tests/selenium_chrome
+  #     dockerfile: Dockerfile
+  #   restart: on-failure
 

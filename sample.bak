@@ -1,0 +1,53 @@
+ALTER TABLE ONLY public.book ALTER COLUMN id SET DEFAULT nextval('public.book_id_seq'::regclass);
+    comment text NOT NULL,
+    book_id integer NOT NULL,
+    reviewer_id integer NOT NULL
+);
+CREATE SEQUENCE public.book_review_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+ALTER SEQUENCE public.book_review_id_seq OWNED BY public.book_review.id;
+CREATE TABLE public.reviewer (
+    id integer NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    name text NOT NULL
+);
+CREATE SEQUENCE public.reviewer_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+ALTER SEQUENCE public.reviewer_id_seq OWNED BY public.reviewer.id;
+ALTER TABLE ONLY public.author ALTER COLUMN id SET DEFAULT nextval('public.author_id_seq'::regclass);
+ALTER TABLE ONLY public.book ALTER COLUMN id SET DEFAULT nextval('public.book_id_seq'::regclass);
+ALTER TABLE ONLY public.book_review ALTER COLUMN id SET DEFAULT nextval('public.book_review_id_seq'::regclass);
+ALTER TABLE ONLY public.reviewer ALTER COLUMN id SET DEFAULT nextval('public.reviewer_id_seq'::regclass);
+ALTER TABLE ONLY public.author
+    ADD CONSTRAINT author_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.book
+    ADD CONSTRAINT book_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.book_review
+    ADD CONSTRAINT book_review_pkey PRIMARY KEY (id);
+ALTER TABLE ONLY public.reviewer
+    ADD CONSTRAINT reviewer_pkey PRIMARY KEY (id);
+CREATE TRIGGER set_public_author_updated_at BEFORE UPDATE ON public.author FOR EACH ROW EXECUTE FUNCTION public.set_current_timestamp_updated_at();
+COMMENT ON TRIGGER set_public_author_updated_at ON public.author IS 'trigger to set value of column "updated_at" to current timestamp on row update';
+CREATE TRIGGER set_public_book_review_updated_at BEFORE UPDATE ON public.book_review FOR EACH ROW EXECUTE FUNCTION public.set_current_timestamp_updated_at();
+COMMENT ON TRIGGER set_public_book_review_updated_at ON public.book_review IS 'trigger to set value of column "updated_at" to current timestamp on row update';
+CREATE TRIGGER set_public_book_updated_at BEFORE UPDATE ON public.book FOR EACH ROW EXECUTE FUNCTION public.set_current_timestamp_updated_at();
+COMMENT ON TRIGGER set_public_book_updated_at ON public.book IS 'trigger to set value of column "updated_at" to current timestamp on row update';
+CREATE TRIGGER set_public_reviewer_updated_at BEFORE UPDATE ON public.reviewer FOR EACH ROW EXECUTE FUNCTION public.set_current_timestamp_updated_at();
+COMMENT ON TRIGGER set_public_reviewer_updated_at ON public.reviewer IS 'trigger to set value of column "updated_at" to current timestamp on row update';
+ALTER TABLE ONLY public.book
+    ADD CONSTRAINT book_author_id_fkey FOREIGN KEY (author_id) REFERENCES public.author(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+ALTER TABLE ONLY public.book_review
+    ADD CONSTRAINT book_review_book_id_fkey FOREIGN KEY (book_id) REFERENCES public.book(id) ON UPDATE RESTRICT ON DELETE RESTRICT;
+ALTER TABLE ONLY public.book_review
+    ADD CONSTRAINT book_review_reviewer_id_fkey FOREIGN KEY (reviewer_id) REFERENCES public.reviewer(id) ON UPDATE RESTRICT ON DELETE RESTRICT;

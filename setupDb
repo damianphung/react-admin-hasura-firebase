@@ -1,0 +1,3 @@
+#!/bin/bash
+
+curl -vvv -X POST -H "Content-Type: application/json" -H "X-Hasura-Role: admin" --data @opts.json http://localhost:8080/v1alpha1/pg_dump > out.sql

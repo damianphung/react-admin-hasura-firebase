@@ -1,0 +1,4 @@
+{
+    "opts": ["-O", "-x", "--schema-only", "--schema", "public"],
+    "clean_output": true
+}
