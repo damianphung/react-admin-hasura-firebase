@@ -22,7 +22,7 @@ const firebaseConfig = {
 
 const firebaseOptions = {
   // Enable logging of react-admin-firebase
-  logging: true
+  logging: true,
   // Authentication persistence, defaults to 'session', options are 'session' | 'local' | 'none'
   persistence: "none"
 };
