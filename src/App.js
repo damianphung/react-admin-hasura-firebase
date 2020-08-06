@@ -10,19 +10,21 @@ import CustomLoginPage from './CustomLoginPage';
 
 // Define Firebase auth provider
 const firebaseConfig = {
-  apiKey: "AIzaSyDL9pXM6XuKDKs-jcCuZuc263t6yAHk7xc",
-  authDomain: "react-admin-low-code.firebaseapp.com",
-  databaseURL: "https://react-admin-low-code.firebaseio.com",
-  projectId: "react-admin-low-code",
-  storageBucket: "react-admin-low-code.appspot.com",
-  messagingSenderId: "477028362078",
-  appId: "1:477028362078:web:9ab7803d11783132f6d1cf"
+  apiKey: "AIzaSyAeTQUcAnY0Cq6uyxLfBvihW5EvLLzk6xM",
+  authDomain: "react-admin-botservice.firebaseapp.com",
+  databaseURL: "https://react-admin-botservice.firebaseio.com",
+  projectId: "react-admin-botservice",
+  storageBucket: "react-admin-botservice.appspot.com",
+  messagingSenderId: "227248537210",
+  appId: "1:227248537210:web:afece4f9cdd804e8d545c3"
 };
+
+
 const firebaseOptions = {
   // Enable logging of react-admin-firebase
-  logging: true,
+  logging: true
   // Authentication persistence, defaults to 'session', options are 'session' | 'local' | 'none'
-  persistence: "session"
+  persistence: "none"
 };
 
 // This defines the AuthProvider first
@@ -41,7 +43,8 @@ const httpClient = (url, options = {}) => {
     };
 
 // Define the dataprovider
-const dataProvider = hasuraDataProvider('http://localhost:8081', httpClient);
+// ngtok this and deploy on firebase
+const dataProvider = hasuraDataProvider('https://6b4438a3dff6.ngrok.io', httpClient);
 
 // Define main App
 const App = () => {
