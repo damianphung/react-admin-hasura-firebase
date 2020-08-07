@@ -12,11 +12,12 @@ const uiConfig = {
   signInSuccessUrl: '#/',
   // We will display Google and Facebook as auth providers.
   signInOptions: [
-    {
-        provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-        signInMethod: firebase.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD
-        // requireDisplayName: true
-    },    
+    // {
+    //     provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+    //     signInMethod: firebase.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD
+    //     // requireDisplayName: true
+    // },    
+    firebase.auth.EmailAuthProvider.PROVIDER_ID,
     firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     firebase.auth.FacebookAuthProvider.PROVIDER_ID,
   ]
@@ -30,7 +31,7 @@ const CustomLoginForm = props => (
       <p>Username: test@example.com</p>
       <p>Password: password</p>
     </div>
-    {/* <LoginForm {...props} /> */}
+    <LoginForm {...props} />
     <SignInScreen />
   </div>
 );
