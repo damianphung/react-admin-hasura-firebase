@@ -1,0 +1,29 @@
+container shipping
+
+Google
+Cloud run.
+Can be combined with firebase 
+
+AWS
+Fargate
+
+
+Heroku
+Create webapp from repo.
+Procfile
+
+Heroku container
+heroku container:login
+
+heroku create 
+#  Outputs sleepy-woodland-40252
+heroku container:push web -a sleepy-woodland-40252
+heroku container:release web -a sleepy-woodland-40252
+
+# How to push container from a registry? i.e hasura
+
+# make use of add-ons, such as postgres
+heroku addons:create heroku-postgresql:hobby-dev
+
+# Open the app
+heroku open

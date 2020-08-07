@@ -7,10 +7,10 @@ created_at timestamp with time zone not null default now(),
 last_seen timestamp with time zone
 );
 insert into public.users(id, email)
-SELECT cast('ho2VNYE0y2bNFQpcXpH5Mq2LsSm2' as varchar(100)) as id,
+SELECT cast('TuxXGp0ZFcRTDL5OZbz0bn3HVWn2' as varchar(100)) as id,
        cast('test@example.com' as varchar(100)) as email UNION ALL
-SELECT cast('rq7Qr5kgRoYadsyYrbwm9D5LESp2' as varchar(100)) as id,
-       cast('test2@example.com' as varchar(100)) as email;
+SELECT cast('EoFp64JPZEUkljDQcuTVWjBP6Pv2' as varchar(100)) as id,
+       cast('hello@example.com' as varchar(100)) as email;
 
 
 CREATE TABLE public.todos (
@@ -23,13 +23,13 @@ user_id text not null references public.users(id)
 );
 INSERT INTO public.todos(title, is_completed, is_public, user_id)
 SELECT 'todo by test@example.com' as title, false as is_completed, false as is_public,
-       'ho2VNYE0y2bNFQpcXpH5Mq2LsSm2' as user_id UNION ALL
-SELECT 'todo by test2@example.com' as title, false as is_completed, false as is_public,
-       'rq7Qr5kgRoYadsyYrbwm9D5LESp2' as user_id UNION ALL
+       'TuxXGp0ZFcRTDL5OZbz0bn3HVWn2' as user_id UNION ALL
+SELECT 'todo by hello@example.com' as title, false as is_completed, false as is_public,
+       'EoFp64JPZEUkljDQcuTVWjBP6Pv2' as user_id UNION ALL
 SELECT 'public todo by test@example.com' as title, false as is_completed, true as is_public,
-       'ho2VNYE0y2bNFQpcXpH5Mq2LsSm2' as user_id UNION ALL
-SELECT 'public todo by test2@example.com' as title, false as is_completed, true as is_public,
-       'rq7Qr5kgRoYadsyYrbwm9D5LESp2' as user_id;
+       'TuxXGp0ZFcRTDL5OZbz0bn3HVWn2' as user_id UNION ALL
+SELECT 'public todo by hello@example.com' as title, false as is_completed, true as is_public,
+       'EoFp64JPZEUkljDQcuTVWjBP6Pv2' as user_id;
 
 
 /* SET POSTGRES PERMISISONS FOR TODOS APP */

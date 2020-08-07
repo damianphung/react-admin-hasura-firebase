@@ -75,11 +75,11 @@ You will need to:
 6. Uncomment lines 28 to 42 in `firebase/functions/index.js`
 
 
-### Todo:
+### Notes:
 Consider using heroku
 https://devcenter.heroku.com/articles/local-development-with-docker-compose
 
-Need to think about how why firebase auth is not working locally with the custom sign in page.
-- Keeps redirecting to login page.
-- Is JWT being passed back?
-- Is it the session ?
+
+- Need to deploy firebase function before creating a new user in firebase console.
+
+The hasura claims are only populated on signUp when the cloud function is executed.
