@@ -40,18 +40,6 @@ const httpClient = (url, options = {}) => {
           options.headers = new Headers({ Accept: 'application/json' });
       }
       // add your own headers here
-      // The issue is claims are not found:
-      // This needs to be in the header.
-      // const customClaims = {
-      //   "https://hasura.io/jwt/claims": {
-      //     "x-hasura-default-role": "user",
-      //     "x-hasura-allowed-roles": ["user"],
-      //     "x-hasura-user-id": user.uid
-      //   }
-      // };      
-      console.log("JWT -> ", JWT);
-      console.log("decoded JWT.user_id -> ", JSON.parse(atob(JWT.split('.')[1])));
-
       
       options.headers.set('Authorization', `Bearer ${JWT}`);
       return fetchUtils.fetchJson(url, options);
@@ -60,7 +48,7 @@ const httpClient = (url, options = {}) => {
 
 // Define the dataprovider
 // ngtok this and deploy on firebase
-const dataProvider = hasuraDataProvider('https://21a206013681.ngrok.io', httpClient);
+const dataProvider = hasuraDataProvider('https://hasura-container-test.herokuapp.com', httpClient);
 
 // Define main App
 const App = () => {
