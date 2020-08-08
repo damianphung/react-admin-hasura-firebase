@@ -5,8 +5,7 @@ setup:
 build: 
   docker:
     web: Dockerfile.hasura
-release:
-  docker: 
     flyway: Dockerfile.flyway
-
+release:
+  image: flyway
 
