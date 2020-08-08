@@ -3,4 +3,6 @@ FROM flyway/flyway:latest
 RUN mkdir -p /flyway/sql
 COPY ./migrations/sql/V1__todo_app.up.sql /flyway/sql/V1__todo_app.up.sql
 
-CMD "ls -lR / ; -url=jdbc:$DATABASE_URL -mixed=true -connectRetries=60 migrate"
+CMD flyway \
+    -url=jdbc:$DATABASE_URL \
+    -mixed=true -connectRetries=60 migrate
