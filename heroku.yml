@@ -8,6 +8,5 @@ build:
     flyway: Dockerfile.flyway
 release:
   image: flyway
-  command:
-    - "-url=jdbc:$DATABASE_URL -mixed=true -connectRetries=60 migrate"
+
 
