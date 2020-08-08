@@ -2,7 +2,11 @@ setup:
   addons:
   - plan: heroku-postgresql
     as: DATABASE
-
 build: 
   docker:
     web: Dockerfile.hasura
+release:
+  docker: 
+    flyway: Dockerfile.flyway
+
+

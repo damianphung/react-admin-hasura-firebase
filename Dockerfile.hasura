@@ -10,6 +10,14 @@ ENV HASURA_GRAPHQL_DEV_MODE=true
 # https://devcenter.heroku.com/articles/heroku-postgres-plans#hobby-tier
 ENV HASURA_GRAPHQL_PG_CONNECTIONS=15
 
+ENV HASURA_GRAPHQL_DATABASE_URL=$DATABASE_URL
+ENV HASURA_GRAPHQL_ADMIN_SECRET="PLEASECHANGEMEtoanextremelylongpassword"
+ENV HASURA_GRAPHQL_UNAUTHORIZED_ROLE="anonymous"
+ENV HASURA_GRAPHQL_JWT_SECRET='{"type":"RS256","jwk_url": "https://www.googleapis.com/service_accounts/v1/jwk/securetoken@system.gserviceaccount.com", "audience": "react-admin-firebase-hasura", "issuer": "https://securetoken.google.com/react-admin-firebase-hasura"}'
+ENV HASURA_GRAPHQL_ENABLED_LOG_TYPES="startup, http-log, webhook-log, websocket-log, query-log"
+ENV HASURA_GRAPHQL_CORS_DOMAIN="*"
+
+
 # Change $DATABASE_URL to your heroku postgres URL if you're not using
 # the primary postgres instance in your app
 CMD graphql-engine \
