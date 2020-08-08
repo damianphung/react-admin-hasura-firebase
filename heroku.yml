@@ -7,6 +7,9 @@ build:
     web: Dockerfile.hasura
     worker: Dockerfile.flyway
 run:
-  image: worker
+  worker: 
+    command:
+      - flyway -url=jdbc:$DATABASE_URL -mixed=true -connectRetries=60 migrate
+    image: worker
 
 
