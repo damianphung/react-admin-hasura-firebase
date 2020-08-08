@@ -56,7 +56,7 @@ const App = () => {
     <Admin
       dataProvider={dataProvider}
       authProvider={fbAuthProvider}
-      // loginPage={CustomLoginPage}
+      loginPage={CustomLoginPage}
     >
       <Resource
         name="todos"
