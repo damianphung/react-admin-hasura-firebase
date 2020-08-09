@@ -40,7 +40,7 @@ const httpClient = (url, options = {}) => {
           options.headers = new Headers({ Accept: 'application/json' });
       }
       // add your own headers here
-      
+      console.log("JWT -> ", JWT);
       options.headers.set('Authorization', `Bearer ${JWT}`);
       return fetchUtils.fetchJson(url, options);
     });
