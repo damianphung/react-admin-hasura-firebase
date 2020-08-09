@@ -4,14 +4,4 @@ setup:
     as: DATABASE
 build: 
   docker:
-    # web: Dockerfile.hasura
-    flyway: Dockerfile.flyway
-release:
-  image: flyway
-run:
-  flyway:
-    image: flyway
-    command:
-      - ./run.sh    
-    
-  
+    web: Dockerfile.hasura

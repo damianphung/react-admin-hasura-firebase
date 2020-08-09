@@ -1,7 +1,0 @@
-FROM flyway/flyway:latest
-RUN mkdir -p /flyway/sql
-
-COPY ./migrations/sql/V1__todo_app.up.sql /flyway/sql/V1__todo_app.up.sql
-
-
-ENV PATH="/flyway:${PATH}"
