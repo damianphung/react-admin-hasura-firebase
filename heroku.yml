@@ -6,9 +6,12 @@ build:
   docker:
     # web: Dockerfile.hasura
     flyway: Dockerfile.flyway
+release:
+  image: flyway
 run:
-  flyway: flyway
-  command:
-    - ./run.sh
+  flyway:
+    image: flyway
+    command:
+      - ./run.sh    
     
   
