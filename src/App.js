@@ -9,7 +9,7 @@ import { FirebaseAuthProvider } from "react-admin-firebase";
 import CustomLoginPage from './CustomLoginPage';
 import Dashboard from './Dashboard';
 
-import firebase from 'firebase';
+// import firebase from 'firebase';
 // Define Firebase auth provider
 const firebaseConfig = {
   apiKey: "AIzaSyB8CXiCfujjLdry1m35Zb-fpAhUirjsqoo",
