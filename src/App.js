@@ -22,7 +22,7 @@ const firebaseConfig = {
 };
 
 
-const firebaseApp = firebase.initializeApp(firebaseConfig);
+// const firebaseApp = firebase.initializeApp(firebaseConfig);
 
 const firebaseOptions = {
   // Enable logging of react-admin-firebase

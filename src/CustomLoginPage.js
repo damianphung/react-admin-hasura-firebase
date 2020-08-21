@@ -1,6 +1,6 @@
 // LoginPage.js
 import React from "react";
-import { Login, LoginForm } from "react-admin";
+import { Login } from "react-admin";
 import StyledFirebaseAuth from 'react-firebaseui/StyledFirebaseAuth';
 import firebase from 'firebase';
 import { Typography } from '@material-ui/core';
