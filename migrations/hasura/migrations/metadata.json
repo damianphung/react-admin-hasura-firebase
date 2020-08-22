@@ -4,6 +4,25 @@
     {
       "table": {
         "schema": "public",
+        "name": "tags"
+      },
+      "select_permissions": [
+        {
+          "role": "user",
+          "permission": {
+            "columns": [
+              "id",
+              "name",
+              "user_id"
+            ],
+            "filter": {}
+          }
+        }
+      ]
+    },
+    {
+      "table": {
+        "schema": "public",
         "name": "todos"
       },
       "insert_permissions": [
@@ -74,7 +93,8 @@
               "user_id": {
                 "_eq": "X-Hasura-User-Id"
               }
-            }
+            },
+            "check": null
           }
         }
       ]
@@ -110,7 +130,8 @@
               "id": {
                 "_eq": "X-Hasura-User-Id"
               }
-            }
+            },
+            "check": null
           }
         }
       ]
