@@ -39,7 +39,7 @@ const myAuthProvider = {
   // Wrap the login and check for custom claims
   getPermissions: async (params) => {
       const permissions = await baseAuthProvider.getPermissions();
-      console.log("permissions called with params -> ", params);
+      // console.log("permissions called with params -> ", params);
       if( !permissions["https://hasura.io/jwt/claims"] )
       {
         // from 
