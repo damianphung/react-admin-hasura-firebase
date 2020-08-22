@@ -5,6 +5,7 @@ import { UserList, UserShow } from "./users";
 import hasuraDataProvider from "ra-data-hasura";
 import { FirebaseAuthProvider } from "react-admin-firebase";
 import CustomLoginPage from './CustomLoginPage';
+import tags from './tags';
 import Dashboard from './Dashboard';
 import firebase from 'firebase';
 // Define Firebase auth provider
@@ -96,6 +97,7 @@ const App = () => {
           create={TodoCreate}
         />
         <Resource name="users" list={UserList} show={UserShow} />
+        <Resource name="tags" {...tags} />
     </Admin>
   );
 };
