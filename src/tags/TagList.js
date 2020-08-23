@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { connect } from 'react-redux';
-import compose from 'recompose/compose';
+import { compose } from 'recompose';
 import { push } from 'react-router-redux';
 import { withStyles } from '@material-ui/core';
 
