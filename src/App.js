@@ -86,6 +86,7 @@ const App = () => {
   return (
     <Admin
       dashboard={Dashboard}
+      catchAll={Dashboard}
       authProvider={myAuthProvider}
       dataProvider={dataProvider}
       loginPage={CustomLoginPage}
