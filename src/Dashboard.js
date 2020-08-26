@@ -8,16 +8,15 @@ import fetch from "isomorphic-fetch";
 // TODO:
 // Add button to open new window
 // https://github.com/damianphung/react-postgres-starter/blob/master/src/hooks/useAuth.js
-function handleMessage({ origin, data, source }) {
+function handleMessage({ origin, data }) {
 
     console.log("handle message Got event --> source");
     if ( origin === "https://xx-passport-starter.glitch.me") {
-    // if (origin === window.location.origin) {
       if (!data.error) {
         console.log("data ---> ", data)
         if ( data.id )
             localStorage.setItem('facebookData', data.id);
-            console.log("This is where ytou send graphql data! :)")
+            console.log("This is where you send graphql data! :)")
             console.log("origin = ", origin);
             console.log("window.location.origin = ", window.location.origin);     
             
