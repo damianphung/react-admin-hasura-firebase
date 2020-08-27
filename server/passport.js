@@ -15,13 +15,7 @@ passport.deserializeUser(function(id, done) {
   global.console.log("deserializeUser ------ ");
 
   const user = {
-    access_token:
-      "EAADqbBNa0pIBAKUnLoHXkLV12GiTScQplC7D908FFWFO6xfMyOnHBa6xe6mrN7AZAZCMVt4PBLPUZA45BBGQZAW6intWBEZAJP2gEbZBQoo1JMOVSNP9CZCL8qFbEKHaNawydF6CmcZCtDKStvh69jZBSIQbqFh0hYQJ21UbUqm5FWQZDZD",
-    category: "Just For Fun",
-    category_list: [{ id: "129417183848258", name: "Just For Fun" }],
-    name: "Testpage",
-    id: "113775866993678",
-    tasks: ["ANALYZE", "ADVERTISE", "MODERATE", "CREATE_CONTENT", "MANAGE"]
+    "hello" : "user"
   };
   done(null, user);
 });
@@ -32,7 +26,7 @@ passport.use(
       clientID: process.env.FACEBOOK_APP_ID,
       clientSecret: process.env.FACEBOOK_APP_SECRET,
       graphAPIVersion: "v8.0",
-      callbackURL: `https://933be034b455.ngrok.io/login/facebook/return`,
+      callbackURL: `https://b660acc568e0.ngrok.io/login/facebook/return`,
       profileFields: [
         "id",
         "cover",

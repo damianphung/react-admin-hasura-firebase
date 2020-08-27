@@ -1,5 +1,6 @@
 // in src/Dashboard.js
 import * as React from "react";
+import { useState, useEffect } from 'react';
 import Card from '@material-ui/core/Card';
 import { CardContent, CardActionArea, Typography, Button} from '@material-ui/core';
 import { Title } from 'react-admin';
@@ -8,9 +9,9 @@ import fetch from "isomorphic-fetch";
 // TODO:
 // Add button to open new window
 // https://github.com/damianphung/react-postgres-starter/blob/master/src/hooks/useAuth.js
-function handleMessage({ origin, data }) {
+function handleMessage({ origin, data, source}) {
 
-    console.log("handle message Got event --> source");
+    console.log("handle message Got event --> source ");
     if ( origin === "https://xx-passport-starter.glitch.me") {
       if (!data.error) {
         console.log("data ---> ", data)
@@ -29,7 +30,9 @@ function handleMessage({ origin, data }) {
     }
 }
 
-function blah() {
+function registerEvent() {
+    console.log("registerEvent")
+    // window.addEventListener('message', handleMessage, true);
     window.addEventListener('message', handleMessage, true);
 }
 
@@ -38,7 +41,26 @@ function blah() {
 
 export default () => 
 {
-    blah();
+
+    const [count, setCount] = useState(false);
+
+    useEffect(() => {
+        if (!count)
+        {
+            // prevennt multiple registering of events
+            registerEvent();
+            setCount(true);
+        }
+
+
+        // return function cleanup() {
+        //     console.log("CLeaning up")
+        //     setCount(false)
+        //     window.removeEventListener('message', handleMessage, true);
+        // };        
+    });
+
+    
     function buttonClick(event)
     {
         event.stopPropagation();
@@ -51,7 +73,7 @@ export default () =>
         return (
         <Card>
             <Title title="Welcome to the administration" />
-            <CardActionArea href="https://933be034b455.ngrok.io/login/facebook">
+            <CardActionArea href="https://b660acc568e0.ngrok.io/login/facebook">
                 <CardContent>
                     {/* <Typography>Click me!</Typography> */}
                     <Typography gutterBottom variant="h5" component="h2">
