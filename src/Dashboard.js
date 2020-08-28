@@ -5,7 +5,13 @@ import Card from '@material-ui/core/Card';
 import { CardContent, CardActionArea, Typography, Button} from '@material-ui/core';
 import { Title } from 'react-admin';
 import fetch from "isomorphic-fetch";
+import {
+    BrowserRouter as Router,
+    Switch,
+    useLocation
+  } from "react-router-dom";
 
+var qs = require("qs");
 // TODO:
 // Add button to open new window
 // https://github.com/damianphung/react-postgres-starter/blob/master/src/hooks/useAuth.js
@@ -13,6 +19,7 @@ function handleMessage({ origin, data, source}) {
 
     console.log("handle message Got event --> source ");
     if ( origin === "https://xx-passport-starter.glitch.me") {
+        // if ( origin === "https://99c9c66d1a37.ngrok.io") {
       if (!data.error) {
         console.log("data ---> ", data)
         if ( data.id )
@@ -39,9 +46,9 @@ function registerEvent() {
 
 
 
-export default () => 
+export default (props) => 
 {
-
+    let location = useLocation();
     const [count, setCount] = useState(false);
 
     useEffect(() => {
@@ -49,9 +56,14 @@ export default () =>
         {
             // prevennt multiple registering of events
             registerEvent();
+            alert("Loaded dashboard")
+            const session = qs.parse(location.search, { ignoreQueryPrefix: true }).session;
+            // let url = new URL((location));
+            // let searchParams = new URLSearchParams(location);
+            // alert(url);
+
             setCount(true);
         }
-
 
         // return function cleanup() {
         //     console.log("CLeaning up")
@@ -60,15 +72,25 @@ export default () =>
         // };        
     });
 
-    
+    // let url = new URL("https://99c9c66d1a37.ngrok.io?session");
+    // let searchParams = new URLSearchParams(url.search);
+    // console.log("search params -> ", searchParams);
+    // console.log("has session -> ", searchParams.get("session"));    
+
+    // const parsed = queryString.parse(location.search);    
     function buttonClick(event)
     {
         event.stopPropagation();
         event.preventDefault();
-        // var childwin = window.open('https://933be034b455.ngrok.io/login/facebook', "popup", 'height=600px, width=600px');
+        // var childwin = window.open('https://99c9c66d1a37.ngrok.io/login/facebook', "popup", 'height=600px, width=600px');
         var childwin = window.open('https://xx-passport-starter.glitch.me/login/facebook', "popup", 'height=600px, width=600px');
  
     }
+            
+    // let location = useLocation();
+    // console.log("location --> ", location);
+    // let searchParams = new URLSearchParams(location.pathname);
+    // console.log("search params --> ", searchParams);   
     
         return (
         <Card>

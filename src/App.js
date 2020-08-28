@@ -1,13 +1,18 @@
 import React from "react";
+import { Route } from 'react-router-dom';
 import { fetchUtils, Admin, Resource } from "react-admin";
 import { TodoCreate, TodoEdit, TodoList } from "./todos";
-import { UserList, UserShow } from "./users";
 import hasuraDataProvider from "ra-data-hasura";
 import { FirebaseAuthProvider } from "react-admin-firebase";
+import firebase from 'firebase';
+
+/** Custom pages  */
+import { UserList, UserShow } from "./users";
 import CustomLoginPage from './CustomLoginPage';
 import tags from './tags';
 import Dashboard from './Dashboard';
-import firebase from 'firebase';
+import CustomPage from './CustomPage';
+
 // Define Firebase auth provider
 const firebaseConfig = {
   apiKey: "AIzaSyB8CXiCfujjLdry1m35Zb-fpAhUirjsqoo",
@@ -34,35 +39,57 @@ const firebaseOptions = {
 const baseAuthProvider = FirebaseAuthProvider(firebaseConfig, firebaseOptions);
 
 // Use this just like the normal auth provider
+// 
 const myAuthProvider = {
   // Copy all authprovider functionality
   ...baseAuthProvider,
+
+  // login: async (params) => 
+  // {
+  //   console.log("login --");
+  //   let searchParams = new URLSearchParams(this.props.location.search);
+  //   console.log("search params --> ", searchParams);
+  //   await baseAuthProvider.HandleAuthLogin(params);
+  // },
   // Wrap the login and check for custom claims
   getPermissions: async (params) => {
-      const permissions = await baseAuthProvider.getPermissions();
-      // console.log("permissions called with params -> ", params);
-      if( !permissions["https://hasura.io/jwt/claims"] )
+
+      try {
+
+     
+        const permissions = await baseAuthProvider.getPermissions();
+
+        // console.log("permissions called with params -> ", params);
+        if( !permissions["https://hasura.io/jwt/claims"] )
+        {
+          // from 
+          // https://firebase.google.com/docs/auth/admin/custom-claims
+          const user = await baseAuthProvider.checkAuth();
+          if (user) {
+            // Check if refresh is required.
+            let metadataRef = null;
+            let callback = null;
+            metadataRef = firebase.database().ref('metadata/' + user.uid + '/refreshTime');
+            callback = (snapshot) => {
+              // Force refresh to pick up the latest custom claims changes.
+              // Note this is always triggered on first call. Further optimization could be
+              // added to avoid the initial trigger when the token is issued and already contains
+              // the latest claims.
+              user.getIdToken(true);
+            };
+            // Subscribe new listener to changes on that node.
+            metadataRef.on('value', callback);
+          }      
+        }   
+        console.log("Permissions -> ", permissions);
+        return permissions;
+      }
+      catch(e)
       {
-        // from 
-        // https://firebase.google.com/docs/auth/admin/custom-claims
-        const user = await baseAuthProvider.checkAuth();
-        if (user) {
-          // Check if refresh is required.
-          let metadataRef = null;
-          let callback = null;
-          metadataRef = firebase.database().ref('metadata/' + user.uid + '/refreshTime');
-          callback = (snapshot) => {
-            // Force refresh to pick up the latest custom claims changes.
-            // Note this is always triggered on first call. Further optimization could be
-            // added to avoid the initial trigger when the token is issued and already contains
-            // the latest claims.
-            user.getIdToken(true);
-          };
-          // Subscribe new listener to changes on that node.
-          metadataRef.on('value', callback);
-        }      
-      }   
-      return permissions;
+        console.log("error ", e )
+        // return permissions;
+      }
+      
   },
 };
 
@@ -81,10 +108,16 @@ const httpClient = (url, options = {}) =>  {
 // Define the dataprovider
 const dataProvider = hasuraDataProvider('https://hasura-container-test.herokuapp.com', httpClient);
 
+
+
+const customRoutes = [
+  <Route exact path="/CustomPage" component={CustomPage} noLayout />
+];
 // Define main App
 const App = () => {
   return (
     <Admin
+      customRoutes={customRoutes}
       dashboard={Dashboard}
       catchAll={Dashboard}
       authProvider={myAuthProvider}

@@ -33,6 +33,9 @@ const uiConfig = {
 const SignInScreen = () => <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth={firebase.auth()}/>;
 
 const CustomLoginForm = props => {
+
+  const { location } = props;
+  console.log("Location --> ", location);  
   return(
       <div>
         <div style={{fontFamily: "monospace", marginLeft: '5em', marginRight: '5em' }}>
