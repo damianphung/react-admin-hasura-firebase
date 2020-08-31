@@ -28,12 +28,19 @@ function handleMessage({ origin, data, source}) {
             console.log("origin = ", origin);
             console.log("window.location.origin = ", window.location.origin);     
             
+        } else if ( data.session )
+        {
+            console.log("Got session ", data.session)
         }
       }
     else{
 
         console.log("origin = ", origin);
         console.log("window.location.origin = ", window.location.origin);
+        if ( data )
+        {
+            console.log("Got data ", data)
+        }        
     }
 }
 
@@ -56,8 +63,10 @@ export default (props) =>
         {
             // prevennt multiple registering of events
             registerEvent();
-            alert("Loaded dashboard")
+            // alert("Loaded dashboard")
             const session = qs.parse(location.search, { ignoreQueryPrefix: true }).session;
+            alert(session);
+            window.localStorage.setItem("Session", session);
             // let url = new URL((location));
             // let searchParams = new URLSearchParams(location);
             // alert(url);

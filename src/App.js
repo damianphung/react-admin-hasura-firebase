@@ -13,6 +13,13 @@ import tags from './tags';
 import Dashboard from './Dashboard';
 import CustomPage from './CustomPage';
 
+// import { useRouterHistory } from 'react-router'
+import { createBrowserHistory } from 'history'
+// import { browserHistory } from 'react-router'
+// import { useHistory } from 'react-router-dom'
+const history = createBrowserHistory();
+// const history = useHistory()
+
 // Define Firebase auth provider
 const firebaseConfig = {
   apiKey: "AIzaSyB8CXiCfujjLdry1m35Zb-fpAhUirjsqoo",
@@ -110,6 +117,7 @@ const dataProvider = hasuraDataProvider('https://hasura-container-test.herokuapp
 
 
 
+
 const customRoutes = [
   <Route exact path="/CustomPage" component={CustomPage} noLayout />
 ];
@@ -117,6 +125,7 @@ const customRoutes = [
 const App = () => {
   return (
     <Admin
+      history={history}
       customRoutes={customRoutes}
       dashboard={Dashboard}
       catchAll={Dashboard}

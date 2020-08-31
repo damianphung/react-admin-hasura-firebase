@@ -26,7 +26,7 @@ passport.use(
       clientID: process.env.FACEBOOK_APP_ID,
       clientSecret: process.env.FACEBOOK_APP_SECRET,
       graphAPIVersion: "v8.0",
-      callbackURL: `https://b660acc568e0.ngrok.io/login/facebook/return`,
+      callbackURL: `'https://xx-passport-starter.glitch.me/login/facebook/return`,
       profileFields: [
         "id",
         "cover",
