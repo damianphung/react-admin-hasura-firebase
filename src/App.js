@@ -5,12 +5,12 @@ import { TodoCreate, TodoEdit, TodoList } from "./todos";
 import hasuraDataProvider from "ra-data-hasura";
 import { FirebaseAuthProvider } from "react-admin-firebase";
 import firebase from 'firebase';
-
 /** Custom pages  */
 import { UserList, UserShow } from "./users";
 import CustomLoginPage from './CustomLoginPage';
 import tags from './tags';
-import Dashboard from './Dashboard';
+import dashboard from './dashboard'
+// import Dashboard from './dashboard/Dashboard';
 import CustomPage from './CustomPage';
 
 // import { useRouterHistory } from 'react-router'
@@ -119,28 +119,38 @@ const dataProvider = hasuraDataProvider('https://hasura-container-test.herokuapp
 
 
 const customRoutes = [
-  <Route exact path="/CustomPage" component={CustomPage} noLayout />
+  <Route exact path="/CustomPage" component={CustomPage}  />
 ];
 // Define main App
 const App = () => {
   return (
     <Admin
-      history={history}
+      
       customRoutes={customRoutes}
-      dashboard={Dashboard}
-      catchAll={Dashboard}
+      // dashboard={Dashboard}
+      history={history}
+      // catchAll={Dashboard}
       authProvider={myAuthProvider}
       dataProvider={dataProvider}
       loginPage={CustomLoginPage}
     >
-        <Resource
-          name="todos"
-          list={TodoList}
-          edit={TodoEdit}
-          create={TodoCreate}
-        />
-        <Resource name="users" list={UserList} show={UserShow} />
-        <Resource name="tags" {...tags} />
+      {permissions => [
+        <Resource name="Dashboard" {...dashboard} />,
+        <Resource name="tags" {...tags} />,
+        permissions.email_verified ?
+          <Resource
+            name="todos"
+            list={TodoList}
+            edit={TodoEdit}
+            create={TodoCreate}
+          /> 
+          : null,
+        permissions.email_verified ?
+          <Resource name="users" list={UserList} show={UserShow} />
+          : null,
+        
+      ]
+    }
     </Admin>
   );
 };
