@@ -32,6 +32,7 @@ const TagListActions = ({ basePath }) => (
 class TagList extends React.Component {
     render() {
         const { push, classes, ...props } = this.props;
+        console.log("permissions tags -> ", props )
         return (
             <Fragment>
                 <List

@@ -9,8 +9,8 @@ import firebase from 'firebase';
 import { UserList, UserShow } from "./users";
 import CustomLoginPage from './CustomLoginPage';
 import tags from './tags';
-import dashboard from './dashboard'
-// import Dashboard from './dashboard/Dashboard';
+// import dashboard from './dashboard'
+import Dashboard from './Dashboard';
 import CustomPage from './CustomPage';
 
 // import { useRouterHistory } from 'react-router'
@@ -53,9 +53,7 @@ const myAuthProvider = {
 
   // login: async (params) => 
   // {
-  //   console.log("login --");
-  //   let searchParams = new URLSearchParams(this.props.location.search);
-  //   console.log("search params --> ", searchParams);
+  //   alert("login -- ", params);
   //   await baseAuthProvider.HandleAuthLogin(params);
   // },
   // Wrap the login and check for custom claims
@@ -88,7 +86,7 @@ const myAuthProvider = {
             metadataRef.on('value', callback);
           }      
         }   
-        console.log("Permissions -> ", permissions);
+        // console.log("Permissions -> ", permissions);
         return permissions;
       }
       catch(e)
@@ -127,7 +125,7 @@ const App = () => {
     <Admin
       
       customRoutes={customRoutes}
-      // dashboard={Dashboard}
+      dashboard={Dashboard}
       history={history}
       // catchAll={Dashboard}
       authProvider={myAuthProvider}
@@ -135,7 +133,7 @@ const App = () => {
       loginPage={CustomLoginPage}
     >
       {permissions => [
-        <Resource name="Dashboard" {...dashboard} />,
+        // <Resource name="Dashboard" {...dashboard} />,
         <Resource name="tags" {...tags} />,
         permissions.email_verified ?
           <Resource
