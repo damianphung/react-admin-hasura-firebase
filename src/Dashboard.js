@@ -10,14 +10,14 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { push } from 'react-router-redux';
 import { withStyles } from '@material-ui/core';
-import { useDataProvider, Loading, Error } from 'react-admin';
+import { fetchUtils, useDataProvider, Loading, Error } from 'react-admin';
 import {
     BrowserRouter as Router,
     Switch,
     useLocation
   } from "react-router-dom";
 
-var qs = require("qs");
+
 
 const styles = {
     drawerContent: {
@@ -124,15 +124,16 @@ const Dashboard = (props) =>
 
 
     const [mutate, { loading }] = useMutation();
-    const updateProfile = (id, fbid) => mutate({
+    const updateProfile = (id, json) => mutate({
         type: 'update',
-        resource: 'users',
+        resource: 'users', // shopify facebook table linker
         payload: {
             id: id,
-            data: { last_seen: new Date(), fb_id: fbid }
+            data: { fb_id: json.facebook }
         },
     },
     {
+        // , fb_id: fbid
         onSuccess: ({data}) => {
             console.log("onSuccess data ", data)
         },
@@ -157,8 +158,19 @@ const Dashboard = (props) =>
                     // console.log("This is where you send graphql data! :)")
                     console.log("origin = ", origin);
                     console.log("window.location.origin = ", window.location.origin);       
-
-                    updateProfile(rest.permissions.user_id, data.id);
+                    const storedToken = localStorage.getItem('token');
+                    const json = {
+                        storedToken : storedToken,
+                        facebook : data.id
+                    };
+                    // do a fetch instead?
+                    // Send token + facebook id to web server to associate the two
+                    let options = {};
+                    options.headers = new Headers({ Accept: 'application/json', "X-APP-TOKEN": storedToken, "facebook": data.id });
+    
+                    console.log("Sending fetch")
+                    return fetchUtils.fetchJson("https://xx-passport-starter.glitch.me/facebook", options);                    
+                    // updateProfile(rest.permissions.user_id, json);
                 }
             } 
             else if ( data.session )
@@ -183,8 +195,8 @@ const Dashboard = (props) =>
            
             
             // alert(props)
-            const session = qs.parse(location.search, { ignoreQueryPrefix: true }).session;
-            // alert(JSON.stringify(props));
+            // const session = qs.parse(location.search, { ignoreQueryPrefix: true }).session;
+            // alert(session);
             // do GQL here to check user email.
             
             const email_verified = rest.email_verified;
@@ -193,10 +205,10 @@ const Dashboard = (props) =>
                 console.log("Email not verified");
             }
 
-            if ( session )
-            {
-                window.localStorage.setItem("Session", session);
-            }
+            // if ( session )
+            // {
+            //     window.localStorage.setItem("Session", session);
+            // }
 
             // let url = new URL((location));
             // let searchParams = new URLSearchParams(location);

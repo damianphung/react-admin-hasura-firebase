@@ -60,8 +60,6 @@ const myAuthProvider = {
   getPermissions: async (params) => {
 
       try {
-
-     
         const permissions = await baseAuthProvider.getPermissions();
 
         // console.log("permissions called with params -> ", params);

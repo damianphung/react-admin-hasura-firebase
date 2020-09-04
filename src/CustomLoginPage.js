@@ -36,6 +36,14 @@ const CustomLoginForm = props => {
 
   const { location } = props;
   console.log("Location --> ", location);  
+  let qs = require("qs");
+  const token = qs.parse(location.search, { ignoreQueryPrefix: true }).token;
+  
+  if ( token )
+  {
+    localStorage.setItem('token', token);
+  }
+
   return(
       <div>
         <div style={{fontFamily: "monospace", marginLeft: '5em', marginRight: '5em' }}>
