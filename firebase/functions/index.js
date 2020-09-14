@@ -43,8 +43,6 @@ async function fetchGraphQL(operationsDoc, operationName, variables) {
 
 // On sign up.
 exports.processSignUp = functions.auth.user().onCreate(user => {
-  try 
-  {
     // Load API keys, secrets etc. from Firebase environment
     // https://firebase.google.com/docs/functions/config-env
     const { app: config } = functions.config();
