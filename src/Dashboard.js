@@ -1,23 +1,20 @@
 // in src/Dashboard.js
 import * as React from "react";
-import { useRef, useState, useEffect } from 'react';
+import { Fragment } from "react";
+import { useState, useEffect } from 'react';
 import Card from '@material-ui/core/Card';
 import { CardContent, CardActionArea, Typography, Button} from '@material-ui/core';
-import { Title } from 'react-admin';
 import { useMutation } from 'react-admin';
-
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { push } from 'react-router-redux';
 import { withStyles } from '@material-ui/core';
-import { fetchUtils, useDataProvider, Loading, Error } from 'react-admin';
+import { useDataProvider, Loading, Error } from 'react-admin';
 import {
     BrowserRouter as Router,
     Switch,
     useLocation
   } from "react-router-dom";
-
-
 
 const styles = {
     drawerContent: {
@@ -25,28 +22,31 @@ const styles = {
     }
 };
 
-
-
 const UserProfile = ( props ) => {
-    // onload check if *user email* has facebook configured in the system
-    // if it is:
-    //  render the page with user details on dash board, by subscribing to graphql server
-    //  render sign up with facebook component
-    // if not:
-    //  assume they come from shopify
-    //  - look in to session value from localStorage.
-    //  - prompt user to sign in to facebook
-    //  - on eventHandler send session value with facebook profile info to server
-    //  - render page, by subscribing to graphql server
-    //  - render fb details component
 
-    
     const dataProvider = useDataProvider();
     const [user, setUser] = useState();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState();
+    const [mutate, { loadingx }] = useMutation();
 
-    // console.log("props ", props);
+    function registerEvent() {
+        console.log("Register event")
+        window.addEventListener('message', handleMessage, true);
+    } 
+
+    function handleMessage({ origin, data, source}) {
+        if ( origin === "https://xx-passport-starter.glitch.me") {
+            if (!data.error) {
+                console.log("data ---> ", data)
+                if ( data.userid && data.fbuserid && data.fbpageid )
+                {    /** Bind session with facebook */
+                    updateProfile(user.user_id , data.userid);
+                }
+            } 
+        }
+    }    
+
     useEffect( () => {
         const permissions = props.permissions;
         const userId = permissions.user_id; 
@@ -55,8 +55,9 @@ const UserProfile = ( props ) => {
         dataProvider.getOne('users', { id: userId })
             .then(({ data }) => {
                 console.log("data ", data)
-                setUser(data);
+                setUser(data);                
                 setLoading(false);
+                
             })
             .catch(error => {
                 setError(error);
@@ -67,39 +68,84 @@ const UserProfile = ( props ) => {
     if (loading) return <Loading />;
     if (error) return <Error />;
     if (!user) return null;
+    
+    registerEvent();
+    const updateProfile = (id, facebookid) => mutate({
+        type: 'update',
+        resource: 'users', // shopify facebook table linker
+        payload: {
+            id: id,
+            data: { facebook_id: facebookid }
+        },
+    },
+    {
+        onSuccess: ({data}) => {
+            setLoading(false);
+            window.location.reload(false);
+        },
+        onFailure: (error) => {
+            setLoading(false);
+            console.log("onFailure Error ", error.message)
+        },
+    }
+    );
+
+    const userToken = localStorage.getItem("token");
+    if( userToken === null )
+    {
+        console.log("Please sign up through shopify")
+    }   
+    else if ( !user.session_id ) // first time login 
+    {
+        // send session id for user to GQL
+        // Bind user and session
+        fetch('https://xx-passport-starter.glitch.me/linkUser', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              "x-app-token" : userToken
+            },
+            body: JSON.stringify({
+                user: user.id
+            }),
+          })
+          .then(({ data }) => {
+            console.log("linkUser data ", data)
+
+        })
+         .catch(error => {
+            console.log("linkUser error ", error)
+        })     
+    }
 
     return (
         <Card>
             <CardActionArea>
                 <CardContent>
-                    {true ?  
-                    <ul>
-                        Signed in with facebook
-                        <li>Email: {user.email}</li>
-                    </ul>    
+                    {user.facebook_id  ?  
+                    <Fragment>
+                        <Typography gutterBottom variant="h5" component="h2">
+                            Lizard
+                        </Typography>
+                        <Typography variant="body2" color="textSecondary" component="p">
+                            Lizards are a widespread group of squamate reptiles, with over 6,000
+                            species, ranging across all continents except Antarctica
+                        </Typography>
+                    </Fragment>
                     :
-                    <ul>
-                        Please login with facebook
-                        <li>id: {user.id}</li>
-                    </ul>                    
-                    }            
-                    {/* <Typography>Click me!</Typography> */}
-                    <Typography gutterBottom variant="h5" component="h2">
-                        Lizard
-                    </Typography>
-                    <Typography variant="body2" color="textSecondary" component="p">
-                        Lizards are a widespread group of squamate reptiles, with over 6,000
-                        species, ranging across all continents except Antarctica
-                    </Typography>
-                    <Button
-                        size="small"
-                        variant="contained"
-                        color="primary"
-                        onMouseDown={event => event.stopPropagation()}
-                        onClick={event => buttonClick(event)}
-                    >
-                        Click to sign in
-                    </Button>                           
+                    <Fragment>
+                        <Button
+                            size="small"
+                            variant="contained"
+                            color="primary"
+                            onMouseDown={event => event.stopPropagation()}
+                            onClick={event => buttonClick(event)}
+                        >
+                            Click to sign in
+                        </Button>        
+                    </Fragment>
+                    }                   
                         
                 </CardContent>
             </CardActionArea>
@@ -121,68 +167,61 @@ const Dashboard = (props) =>
     // const { loaded, permissionsx } = usePermissions();
     let location = useLocation();
     const [count, setCount] = useState(false);
+    // const [mutate, { loading }] = useMutation();
+    // const updateProfile = (id, facebookid) => mutate({
+    //     type: 'update',
+    //     resource: 'users', // shopify facebook table linker
+    //     payload: {
+    //         id: id,
+    //         data: { facebook_id: facebookid }
+    //     },
+    // },
+    // {
+    //     // , fb_id: fbid
+    //     onSuccess: ({data}) => {
+    //         console.log("onSuccess data ", data)
+    //     },
+    //     onFailure: (error) => console.log("onFailure Error ", error.message),
+    // }
+    // );    
 
-
-    const [mutate, { loading }] = useMutation();
-    const updateProfile = (id, json) => mutate({
-        type: 'update',
-        resource: 'users', // shopify facebook table linker
-        payload: {
-            id: id,
-            data: { fb_id: json.facebook }
-        },
-    },
-    {
-        // , fb_id: fbid
-        onSuccess: ({data}) => {
-            console.log("onSuccess data ", data)
-        },
-        onFailure: (error) => console.log("onFailure Error ", error.message),
-    }
-    );    
-
-    // TODO:
-    // Add button to open new window
-    // https://github.com/damianphung/react-postgres-starter/blob/master/src/hooks/useAuth.js
-    function handleMessage({ origin, data, source}) {
-
-        // console.log("handle message Got event --> origin ", origin);
-        // console.log("rest user_id --> ", rest.permissions.user_id)
-        if ( origin === "https://xx-passport-starter.glitch.me") {
-            // if ( origin === "https://99c9c66d1a37.ngrok.io") {
-            if (!data.error) {
-                console.log("data ---> ", data)
-                if ( data.id )
-                {
-                    localStorage.setItem('facebookData', data.id);
-                    // console.log("This is where you send graphql data! :)")
-                    console.log("origin = ", origin);
-                    console.log("window.location.origin = ", window.location.origin);       
-                    const storedToken = localStorage.getItem('token');
-                    const json = {
-                        storedToken : storedToken,
-                        facebook : data.id
-                    };
-                    // do a fetch instead?
-                    // Send token + facebook id to web server to associate the two
-                    let options = {};
-                    options.headers = new Headers({ Accept: 'application/json', "X-APP-TOKEN": storedToken, "facebook": data.id });
+    // function handleMessage({ origin, data, source}) {
+    //     // console.log("handle message Got event --> origin ", origin);
+    //     // console.log("rest user_id --> ", rest.permissions.user_id)
+    //     if ( origin === "https://xx-passport-starter.glitch.me") {
+    //         if (!data.error) {
+    //             console.log("data ---> ", data)
+    //             if ( data.userid )
+    //             {
+    //                 // localStorage.setItem('facebookData', data.id);
+    //                 // console.log("This is where you send graphql data! :)")
+    //                 console.log("origin = ", origin);
+    //                 console.log("window.location.origin = ", window.location.origin);       
+    //                 // const json = {
+    //                 //     storedToken : storedToken,
+    //                 //     facebook : data.userid
+    //                 // };
+    //                 // // do a fetch instead?
+    //                 // // Send token + facebook id to web server to associate the two
+    //                 // let options = {};
+    //                 // options.headers = new Headers({ 
+    //                 //     'Content-Type': 'application/json',
+    //                 //     'Accept': 'application/json', 
+    //                 //     "x-facebook-user-id": data.userid,
+    //                 //     "x-user-id": rest.permissions.user_id });
     
-                    console.log("Sending fetch")
-                    return fetchUtils.fetchJson("https://xx-passport-starter.glitch.me/facebook", options);                    
-                    // updateProfile(rest.permissions.user_id, json);
-                }
-            } 
-            else if ( data.session )
-            {
-                console.log("Got session ", data.session)
-            }
-        }
-    }
+    //                 console.log("Sending fetch")
+    //                 updateProfile(rest.permissions.user_id , data.userid);
+    //                 // Should send a POST instead to get a response. Set that response in local storage
+    //                 // return fetchUtils.fetchJson("https://xx-passport-starter.glitch.me/facebook", options);   
+    //             }
+    //         } 
+    //     }
+    // }
 
-    function registerEvent() {
-        window.addEventListener('message', handleMessage, true);
-    }
+    // function registerEvent() {
+    //     window.addEventListener('message', handleMessage, true);
+    // } 
 
     useEffect(() => {
         if (!count)
@@ -239,7 +278,7 @@ const Dashboard = (props) =>
     // console.log("props --- dashboard ", props);
     // console.log("permissions x-> ", rest)
     if (rest.permissions) {
-        registerEvent();
+        // registerEvent();
         return <UserProfile {...props}/>  
     }
     else {

@@ -16,10 +16,41 @@ admin.initializeApp(functions.config().firebase);
 //   port: functions.config().database.port,
 // });
 
+async function fetchGraphQL(operationsDoc, operationName, variables) {
+  const result = await fetch(
+    process.env.HASURA_URL,
+    {
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "x-hasura-admin-secret": process.env.HASURA_SECRET
+      }      
+      method: "POST",
+      body: JSON.stringify({
+        query: operationsDoc,
+        variables: variables,
+        operationName: operationName
+      })
+    }
+  );
+
+  return await result.json();
+}
+
 
 // On sign up.
 exports.processSignUp = functions.auth.user().onCreate(user => {
-  
+  try 
+  {
+    const newUser = `mutation userMutation {
+      insert_users_one(object: {id: "${user.uid}", email: "${user.email}"})
+    }`;
+    await fetchGraphQL(newUser, {});
+  }
+  catch(err) {
+    console.log(err.stack);
+  }
+
   const customClaims = {
     "https://hasura.io/jwt/claims": {
       "x-hasura-default-role": "user",

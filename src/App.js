@@ -84,7 +84,7 @@ const myAuthProvider = {
             metadataRef.on('value', callback);
           }      
         }   
-        // console.log("Permissions -> ", permissions);
+        console.log("Permissions -> ", permissions);
         return permissions;
       }
       catch(e)

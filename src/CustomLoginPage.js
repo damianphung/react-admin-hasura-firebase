@@ -35,10 +35,8 @@ const SignInScreen = () => <StyledFirebaseAuth uiConfig={uiConfig} firebaseAuth=
 const CustomLoginForm = props => {
 
   const { location } = props;
-  console.log("Location --> ", location);  
   let qs = require("qs");
   const token = qs.parse(location.search, { ignoreQueryPrefix: true }).token;
-  
   if ( token )
   {
     localStorage.setItem('token', token);
