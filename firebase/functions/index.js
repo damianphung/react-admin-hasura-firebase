@@ -17,6 +17,8 @@ admin.initializeApp(functions.config().firebase);
 // });
 
 async function fetchGraphQL(operationsDoc, operationName, variables) {
+
+
   const result = await fetch(
     process.env.HASURA_URL,
     {
@@ -42,6 +44,15 @@ async function fetchGraphQL(operationsDoc, operationName, variables) {
 exports.processSignUp = functions.auth.user().onCreate(user => {
   try 
   {
+    // Load API keys, secrets etc. from Firebase environment
+    // https://firebase.google.com/docs/functions/config-env
+    const { app: config } = functions.config();
+    Object.keys(config).forEach(key => {
+      process.env[key.toUpperCase()] =
+        typeof config[key] === 'object'
+          ? JSON.stringify(config[key])
+          : config[key];
+    });    
     console.log("process.env.HASURA_URL --", process.env.HASURA_URL);
     const newUser = `mutation userMutation {
       insert_users_one(object: {id: "${user.uid}", email: "${user.email}"})
