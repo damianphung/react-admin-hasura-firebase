@@ -57,7 +57,12 @@ exports.processSignUp = functions.auth.user().onCreate(user => {
       insert_users_one(object: {id: "${user.uid}", email: "${user.email}"})
     }`;
     fetchGraphQL(newUser, {})
-    .then(function(json) {
+    .then( function(json) {
+        console.log("resolved json ", json); 
+        return Promise.resolve(1);
+    })
+    .then( function(resolved_value) { 
+      console.log("resolved ... custom claims now "); 
       const customClaims = {
         "https://hasura.io/jwt/claims": {
           "x-hasura-default-role": "user",
@@ -81,6 +86,7 @@ exports.processSignUp = functions.auth.user().onCreate(user => {
         console.log(err.stack);
     });
 
+});
 
 // Below is only needed if you wish to have Firebase sync its users to a Google Cloud DB
 // We can write any parameter listed here: https://firebase.google.com/docs/reference/admin/node/admin.auth.UserRecord.html
@@ -98,4 +104,3 @@ exports.processSignUp = functions.auth.user().onCreate(user => {
 //   }
 // })().catch(err => console.log(err.stack));
 
-});
