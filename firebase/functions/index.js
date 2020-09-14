@@ -17,7 +17,7 @@ admin.initializeApp(functions.config().firebase);
 //   port: functions.config().database.port,
 // });
 
-async function fetchGraphQL(operationsDoc, operationName, variables) {
+async function fetchGraphQL(operationsDoc, variables) {
 
 
   const result = await fetch(
@@ -31,8 +31,7 @@ async function fetchGraphQL(operationsDoc, operationName, variables) {
       method: "POST",
       body: JSON.stringify({
         query: operationsDoc,
-        variables: variables,
-        operationName: operationName
+        variables: variables
       })
     }
   );
@@ -54,15 +53,31 @@ exports.processSignUp = functions.auth.user().onCreate(user => {
     });    
     console.log("process.env.HASURA_URL --", process.env.HASURA_URL);
     const newUser = `mutation userMutation {
-      insert_users_one(object: {id: "${user.uid}", email: "${user.email}"})
+      insert_users_one(object: {id: "${user.uid}", email: "${user.email}"}) {
+          id
+      }
     }`;
-    fetchGraphQL(newUser, {})
-    .then( function(json) {
-        console.log("resolved json ", json); 
-        return Promise.resolve(1);
-    })
-    .then( function(resolved_value) { 
-      console.log("resolved ... custom claims now "); 
+    fetchGraphQL(newUser, {});
+  const customClaims = {
+    "https://hasura.io/jwt/claims": {
+      "x-hasura-default-role": "user",
+      "x-hasura-allowed-roles": ["user"],
+      "x-hasura-user-id": user.uid
+    }
+  };
+	return admin
+      .auth()
+	  .setCustomUserClaims(user.uid, customClaims)
+	  .then(() => {
+		  // Update real-time database to notify client to force refresh.
+	    const metadataRef = admin.database().ref("metadata/" + user.uid);
+		  // Set the refresh time to the current UTC timestamp.
+		  // This will be captured on the client to force a token refresh.
+		return metadataRef.set({ refreshTime: new Date().getTime() });
+	  });
+    /*
+    .then( function(user) { 
+      console.log("resolved ... custom claims now ", user); 
       const customClaims = {
         "https://hasura.io/jwt/claims": {
           "x-hasura-default-role": "user",
@@ -85,7 +100,7 @@ exports.processSignUp = functions.auth.user().onCreate(user => {
     .catch(function(err) {
         console.log(err.stack);
     });
-
+    */
 });
 
 // Below is only needed if you wish to have Firebase sync its users to a Google Cloud DB
