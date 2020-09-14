@@ -3,6 +3,7 @@
 // and is committed to Firebase with console `firebase deploy --only functions`
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
+const fetch = require("isomorphic-fetch");
 // const { Pool } = require('pg');
 admin.initializeApp(functions.config().firebase);
 
