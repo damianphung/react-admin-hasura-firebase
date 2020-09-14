@@ -42,6 +42,7 @@ async function fetchGraphQL(operationsDoc, operationName, variables) {
 exports.processSignUp = functions.auth.user().onCreate(user => {
   try 
   {
+    console.log("process.env.HASURA_URL --", process.env.HASURA_URL);
     const newUser = `mutation userMutation {
       insert_users_one(object: {id: "${user.uid}", email: "${user.email}"})
     }`;
