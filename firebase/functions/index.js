@@ -24,7 +24,7 @@ async function fetchGraphQL(operationsDoc, operationName, variables) {
         "Content-Type": "application/json",
         Accept: "application/json",
         "x-hasura-admin-secret": process.env.HASURA_SECRET
-      }      
+      },
       method: "POST",
       body: JSON.stringify({
         query: operationsDoc,
@@ -39,25 +39,35 @@ async function fetchGraphQL(operationsDoc, operationName, variables) {
 
 
 // On sign up.
-exports.processSignUp = functions.auth.user().onCreate(user => {
-  try 
-  {
+exports.processSignUp = functions.auth.user().onCreate( user => {
     const newUser = `mutation userMutation {
       insert_users_one(object: {id: "${user.uid}", email: "${user.email}"})
     }`;
-    await fetchGraphQL(newUser, {});
-  }
-  catch(err) {
-    console.log(err.stack);
-  }
+    fetchGraphQL(newUser, {})
+    .then(function(json) {
+      const customClaims = {
+        "https://hasura.io/jwt/claims": {
+          "x-hasura-default-role": "user",
+          "x-hasura-allowed-roles": ["user"],
+          "x-hasura-user-id": user.uid
+        }
+      };
+      return admin
+        .auth()
+        .setCustomUserClaims(user.uid, customClaims)
+        .then(() => {
+          // Update real-time database to notify client to force refresh.
+          const metadataRef = admin.database().ref("metadata/" + user.uid);
+          // Set the refresh time to the current UTC timestamp.
+          // This will be captured on the client to force a token refresh.
+          return metadataRef.set({ refreshTime: new Date().getTime() });
+            });
 
-  const customClaims = {
-    "https://hasura.io/jwt/claims": {
-      "x-hasura-default-role": "user",
-      "x-hasura-allowed-roles": ["user"],
-      "x-hasura-user-id": user.uid
-    }
-  };
+    })
+    .catch(function(err) {
+        console.log(err.stack);
+    });
+
 
 // Below is only needed if you wish to have Firebase sync its users to a Google Cloud DB
 // We can write any parameter listed here: https://firebase.google.com/docs/reference/admin/node/admin.auth.UserRecord.html
@@ -75,14 +85,4 @@ exports.processSignUp = functions.auth.user().onCreate(user => {
 //   }
 // })().catch(err => console.log(err.stack));
 
-  return admin
-    .auth()
-    .setCustomUserClaims(user.uid, customClaims)
-    .then(() => {
-      // Update real-time database to notify client to force refresh.
-      const metadataRef = admin.database().ref("metadata/" + user.uid);
-      // Set the refresh time to the current UTC timestamp.
-      // This will be captured on the client to force a token refresh.
-      return metadataRef.set({ refreshTime: new Date().getTime() });
-        });
 });
