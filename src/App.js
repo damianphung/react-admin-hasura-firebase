@@ -58,11 +58,9 @@ const myAuthProvider = {
   // },
   // Wrap the login and check for custom claims
   getPermissions: async (params) => {
-
       try {
-        const permissions = await baseAuthProvider.getPermissions();
 
-        // console.log("permissions called with params -> ", params);
+        let permissions = await baseAuthProvider.getPermissions();
         if( !permissions["https://hasura.io/jwt/claims"] )
         {
           // from 
@@ -73,17 +71,27 @@ const myAuthProvider = {
             let metadataRef = null;
             let callback = null;
             metadataRef = firebase.database().ref('metadata/' + user.uid + '/refreshTime');
-            callback = (snapshot) => {
-              // Force refresh to pick up the latest custom claims changes.
-              // Note this is always triggered on first call. Further optimization could be
-              // added to avoid the initial trigger when the token is issued and already contains
-              // the latest claims.
-              user.getIdToken(true);
-            };
-            // Subscribe new listener to changes on that node.
-            metadataRef.on('value', callback);
+
+            // Need to wait for the token to refresh. The token gets refreshed within the callback so 
+            // we need to wait for that to finish before proceeding.
+            await new Promise( async (resolve, reject) => {
+              callback = async (snapshot) => { 
+                // Force refresh to pick up the latest custom claims changes.
+                // Note this is always triggered on first call. Further optimization could be
+                // added to avoid the initial trigger when the token is issued and already contains
+                // the latest claims.
+                await user.getIdToken(true);
+                console.log("Force user token refresh ");
+                permissions = await baseAuthProvider.getPermissions();
+                resolve(permissions);
+              };
+              // Subscribe new listener to changes on that node.
+              metadataRef.once('value', callback);
+              // Wait for callback to execute.     
+            });
           }      
-        }   
+        }
+          
         console.log("Permissions -> ", permissions);
         return permissions;
       }
@@ -97,8 +105,9 @@ const myAuthProvider = {
 };
 
 // Create a client for Hasura with the right headers
-const httpClient = (url, options = {}) =>  {
-    return myAuthProvider.getJWTToken().then(function (JWT){
+const httpClient = async (url, options = {}) =>  {
+
+    return myAuthProvider.getJWTToken().then( function (JWT){
       if (!options.headers) {
           options.headers = new Headers({ Accept: 'application/json' });
       }
